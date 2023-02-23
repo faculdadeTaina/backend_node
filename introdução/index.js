@@ -49,10 +49,76 @@ app.get("/game/:id",(req, res)=>{
         res.statusCode=400;
         //res.send("isso não é um numero")
     }else{
-        res.statusCode=200;
+        var id =parseInt(req.params.id);
+        var game =DB.games.find(g=>g.id==id);
+
+        if(game!=undefined){
+            res.statusCode=200;
+            res.json(200)
+        }else{
+        res.statusCode(404);
         //res.send("isso é um numero")
+        }
     }
 //var id =req.params.id;
+})
+app.post("/game",(req,res)=>{
+
+   var{id,title, price, ano}= req.body;
+   DB.games.push({
+    id,
+    title,
+    price,
+    ano
+   });
+
+   res.sendStatus(200)
+})
+app.delete("/game/:id",(req, res)=>{
+ //verificando um se o id e'um numeor
+ if(isNaN(req.params.id)){
+    res.statusCode=400;
+    //res.send("isso não é um numero")
+}else{
+    var id =parseInt(req.params.id);
+    var index =DB.games.findIndex(g=>g.id==id);
+        if(index==-1){
+            res.sendStatus(404)
+        }else{
+            DB.games.splice(index, 1);
+              res.sendStatus(200)
+        }
+            
+}
+
+})
+
+app.put("game/:id",(req, res)=>{
+   //verificando um se o id e'um numeor
+   if(isNaN(req.params.id)){
+    res.statusCode=400;
+    //res.send("isso não é um numero")
+}else{
+    var id =parseInt(req.params.id);
+    var game =DB.games.find(g=>g.id==id);
+
+    if(game!=undefined){
+        var{title, price, ano}= req.body;
+        if(title!=undefined){
+            game.title=title;
+        }
+        if(price!=undefined){
+            game.price=price;
+        }
+        if(ano!=undefined){
+            game.ano=ano;
+        }
+        res.sendStatus(200)
+    }else{
+    res.statusCode(404);
+    //res.send("isso é um numero")
+    }
+}
 })
 //ver funcionando
 
