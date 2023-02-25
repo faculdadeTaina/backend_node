@@ -7,6 +7,9 @@ const bodyParser=require("body-parser");
 app.use(bodyParser.urlencoded({extends: false}))
 
 app.use(bodyParser.json());
+
+const cors=require("cors")
+app.use(cors())
 //banco de dados falso para tstar os verbos  
 var DB={
     games:[

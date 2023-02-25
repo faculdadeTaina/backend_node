@@ -9,3 +9,5 @@
 
 ###  express - para contruir apis
 ### body-parser -
+
+## axios - para consumir a api  rest
