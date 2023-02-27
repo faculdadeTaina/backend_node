@@ -9,23 +9,47 @@
 </head>
 <body>
     <h1>App game</h1>
-    <form>
+    
         <input type="text" name="title" id="title" placeholder="Qual é o titulo"/>
         <input type="number" name="ano" id="ano" placeholder="Qual é o ano"/>
         
         <input type="number" name="price" id="price" placeholder="Qual é o preço"/>
-        
-        </form>
+        <button onclick="createGame()" type="button">Enviar</button>
+       
+        <h3>Todos os games cadastados:</h3>
     <p id="games">
-Todos os games cadastados
+        
     </p>
-<br/>
+
    
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
+//funcção para coletar ddos
+function createGame(){
+var titleInput=document.getElementById("title")
+var anoInput=document.getElementById("ano")
+var priceInput=document.getElementById("price")
 
+//simulção de json
+
+var game={
+    title:titleInput.value,
+    ano:anoInput.value,
+    price:priceInput.value
+}
+//enviando a api
+axios.post("http://localhost:4000/game", game).then(response=>{
+
+    if(response.status==200){
+        alert("Game cadastrado")
+    }
+}).catch(err=>{
+    console.log(err)
+})
+}
+//metod get
 axios.get("http://localhost:4000/games").then(request=>{
 var games=request.data;
 var list=document.getElementById("games")
