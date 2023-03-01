@@ -11,3 +11,7 @@
 ### body-parser -
 
 ## axios - para consumir a api  rest
+
+## crud completo com api rest 
+<img src="./api-game.png"/>
+

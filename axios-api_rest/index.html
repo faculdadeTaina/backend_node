@@ -10,17 +10,28 @@
 <body>
     <h1>App game</h1>
     
-        <input type="text" name="title" id="title" placeholder="Qual é o titulo"/>
-        <input type="number" name="ano" id="ano" placeholder="Qual é o ano"/>
+        <input type="text" name="title" 
+        id="title" placeholder="Qual é o titulo"/>
+        <input type="number" name="ano" 
+        id="ano" placeholder="Qual é o ano"/>
         
-        <input type="number" name="price" id="price" placeholder="Qual é o preço"/>
+        <input type="number" name="price" 
+        id="price" placeholder="Qual é o preço"/>
         <button onclick="createGame()" type="button">Enviar</button>
        
         <h3>Todos os games cadastados:</h3>
     <p id="games">
         
     </p>
+<hr>
+<input type="text" name="titleEdit" 
+id="title" placeholder="Qual é o titulo"/>
+<input type="number" name="anoEdit" 
+id="ano" placeholder="Qual é o ano"/>
 
+<input type="number" name="priceEdit" 
+id="price" placeholder="Qual é o preço"/>
+<button onclick="createGame()" type="button">Enviar</button>
    
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -49,6 +60,20 @@ axios.post("http://localhost:4000/game", game).then(response=>{
     console.log(err)
 })
 }
+//metodo delete
+function deleteGame(listItem){
+    var id=listItem.getAttribute("data-id")
+
+axios.delete("http://localhost:4000/game/"+id).then(response=>{
+    alert("Game deletado")
+}).catch(err=>{
+console.log(err)
+    })
+
+    //   console.log(id)
+}
+
+
 //metod get
 axios.get("http://localhost:4000/games").then(request=>{
 var games=request.data;
@@ -57,9 +82,26 @@ var list=document.getElementById("games")
 
 games.forEach(game => {
     var item=document.createElement("strong")
+    item.setAttribute("data-id",game.id)
+    item.setAttribute("data-title",game.title)
+    item.setAttribute("data-price",game.price)
+    item.setAttribute("data-ano",game.ano)
+
     item.innerHTML= game.title +"-"+ game.ano +"-"+  game.price;
+ 
+    var deleteBtn=document.createElement("button")
+  deleteBtn.innerHTML="Deletar";
+  item.appendChild(deleteBtn);
+
+  deleteBtn.addEventListener("click", function(){
+        deleteGame(item)
+})
+
+
+
     list.appendChild(item)
 });
+
 }).catch(error=>{
     console.log(error)
 });
