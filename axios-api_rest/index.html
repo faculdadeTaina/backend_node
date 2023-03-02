@@ -12,26 +12,44 @@
     
         <input type="text" name="title" 
         id="title" placeholder="Qual é o titulo"/>
+        <br>
         <input type="number" name="ano" 
         id="ano" placeholder="Qual é o ano"/>
-        
+        <br>
         <input type="number" name="price" 
         id="price" placeholder="Qual é o preço"/>
         <button onclick="createGame()" type="button">Enviar</button>
-       
+        <br>
         <h3>Todos os games cadastados:</h3>
     <p id="games">
         
     </p>
 <hr>
-<input type="text" name="titleEdit" 
-id="title" placeholder="Qual é o titulo"/>
-<input type="number" name="anoEdit" 
-id="ano" placeholder="Qual é o ano"/>
 
-<input type="number" name="priceEdit" 
-id="price" placeholder="Qual é o preço"/>
-<button onclick="createGame()" type="button">Enviar</button>
+<h3>Editar game</h3>
+
+<input 
+placeholder="id"
+type="text"
+name="idEdit" 
+id="idEdit" 
+readonly/>
+<input type="text"
+ name="titleEdit" 
+id="titleEdit" 
+placeholder="Qual é o titulo"
+ />
+<br>
+<input type="number" 
+name="anoEdit" 
+id="anoEdit"
+ placeholder="Qual é o ano"/>
+<br>
+<input type="number" 
+name="priceEdit" 
+id="priceEdit" 
+placeholder="Qual é o preço"/>
+<button onclick="updateGame()" type="button">Confirmar edição</button>
    
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -73,6 +91,45 @@ console.log(err)
     //   console.log(id)
 }
 
+function loadForm(listItem){
+    console.log(listItem);
+    var id=listItem.getAttribute("data-id");
+    var title=listItem.getAttribute("data-title");
+    var ano=listItem.getAttribute("data-ano");
+    var price=listItem.getAttribute("data-price");
+
+    document.getElementById("idEdit").value=id;
+    document.getElementById("titleEdit").value=title;
+    document.getElementById("anoEdit").value=ano;
+    document.getElementById("priceEdit").value=price;
+
+}
+
+function updateGame(){
+
+var idInput=document.getElementById("idEdit");
+var titleInput=document.getElementById("titleEdit");
+var anoInput=document.getElementById("anoEdit");
+var priceInput=document.getElementById("priceEdit");
+
+//simulção de json
+
+var game={
+    title:titleInput.value,
+    ano:anoInput.value,
+    price:priceInput.value
+}
+var id=idInput.value;
+//enviando a api
+axios.put("http://localhost:4000/game/"+id, game).then(response=>{
+
+    if(response.status==200){
+        alert("Game atualizado")
+    }
+}).catch(err=>{
+    console.log(err)
+})
+}
 
 //metod get
 axios.get("http://localhost:4000/games").then(request=>{
@@ -87,18 +144,24 @@ games.forEach(game => {
     item.setAttribute("data-price",game.price)
     item.setAttribute("data-ano",game.ano)
 
-    item.innerHTML= game.title +"-"+ game.ano +"-"+  game.price;
+    item.innerHTML= game.title +"<br>"+ game.ano +"<br>"+  game.price;
  
     var deleteBtn=document.createElement("button")
   deleteBtn.innerHTML="Deletar";
-  item.appendChild(deleteBtn);
+ 
 
   deleteBtn.addEventListener("click", function(){
         deleteGame(item)
 })
 
+var editBtn=document.createElement("button");
+editBtn.innerHTML="Editar";
+editBtn.addEventListener("click", function(){
+    loadForm(item)
+});
 
-
+    item.appendChild(editBtn);
+    item.appendChild(deleteBtn);
     list.appendChild(item)
 });
 
